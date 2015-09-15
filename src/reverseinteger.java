@@ -13,13 +13,15 @@ class Solution {
 	    }
 	    return y;
     }
-    int[] a = {12345, Integer.MIN_VALUE, Integer.MAX_VALUE};
-    int[] b = {this.reverse(a[0]), this.reverse(a[1]), this.reverse(a[2])};
 }
 public class reverseinteger{
     public static void main(String[] args){
     	Solution solution = new Solution();
-		for(int i=0; i<solution.b.length; i++)
-			System.out.println (solution.b[i]);
+    	int[] a = {12345, Integer.MIN_VALUE, Integer.MAX_VALUE};
+        int[] b = a;
+		for(int i=0; i<a.length; i++) {
+			b[i] = solution.reverse(a[i]);
+			System.out.println (b[i]);
+		}
 	}
 }
