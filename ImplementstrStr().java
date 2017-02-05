@@ -34,3 +34,23 @@ public class Solution {
         return -1;
     }
 }
+
+public class Solution {
+    public int strStr(String haystack, String needle) {
+        if(haystack.length() == 0 && needle.length() == 0) return 0;
+        char[] h = haystack.toCharArray();
+        char[] n = needle.toCharArray();
+        for(int i = 0; i <= h.length - n.length; i++) {
+            int match = 0;
+            int id = i;
+            for(int j = 0; j < n.length; j++) {
+                if(h[id] == n[j]) {
+                    id++;
+                    match++;
+                } else break;
+            }
+            if(match == n.length) return i;
+        }
+        return -1;
+    }
+}

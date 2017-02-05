@@ -1,19 +1,27 @@
 public class Solution {
     public int divide(int dividend, int divisor) {
-        // from http://www.jiuzhang.com/solutions/divide-two-integers/
-        if (divisor == 0) return dividend >= 0? Integer.MAX_VALUE : Integer.MIN_VALUE;
-        if (dividend == 0) return 0;
-        if (dividend == Integer.MIN_VALUE && divisor == -1) return Integer.MAX_VALUE;
-        boolean isNegative = (dividend < 0 && divisor > 0) || (dividend > 0 && divisor < 0);
-        long a = Math.abs((long)dividend);
-        long b = Math.abs((long)divisor);
-        int result = 0;
-        while(a >= b) {
-            int shift = 0;
-            while(a >= (b << shift)) shift++;
-            a -= b << (shift - 1);
-            result += 1 << (shift - 1);
+        if(dividend == 0) return 0;
+        if(dividend == Integer.MIN_VALUE && divisor == -1) return Integer.MAX_VALUE;
+        long dvd = Math.abs((long)dividend);
+        long dvs = Math.abs((long)divisor);
+        boolean neg = (dividend > 0 && divisor < 0) || (dividend < 0 && divisor > 0);
+        int ret = 0;
+        long mlt = 1;
+        while(dvd >= dvs) {
+            dvs <<= 1;
+            mlt <<= 1;
         }
-        return isNegative? -result: result;
+        dvs >>= 1;
+        mlt >>= 1;
+        while(dvs > 0) {
+            if(dvd >= dvs) {
+                dvd -= dvs;
+                ret += mlt;
+            } else {
+                dvs >>= 1;
+                mlt >>= 1;
+            }
+        }
+        return neg ? -ret : ret;
     }
 }
