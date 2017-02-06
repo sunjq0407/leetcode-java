@@ -1,23 +1,25 @@
 public class Solution {
     public int[] searchRange(int[] nums, int target) {
-        int left = searchLeft(nums, 0, nums.length - 1, target);
-        int right = searchRight(nums, 0, nums.length - 1, target);
-        return new int[]{left, right};
-    }
-    
-    private int searchLeft(int[] nums, int i, int j, int target) {
-        if(i == j) return nums[i] == target ? i: -1;
-        int index = i / 2 + j / 2;
-        if(nums[index] == target && (index == 0 || nums[index - 1] != target)) return index;
-        if(nums[index] < target) return searchLeft(nums, index + 1, j, target);
-        else return searchLeft(nums, i, index, target);
-    }
-    
-    private int searchRight(int[] nums, int i, int j, int target) {
-        if(i == j) return nums[i] == target ? i: -1;
-        int index = i / 2 + j / 2;
-        if(nums[index] == target && (index == nums.length - 1 || nums[index + 1] != target)) return index;
-        if(nums[index] <= target) return searchRight(nums, index + 1, j, target);
-        else return searchRight(nums, i, index, target);
+        int[] ret = new int[]{-1, -1};
+        if(nums.length == 0) return ret;
+        int l = 0;
+        int r = nums.length - 1;
+        while(l + 1 < r) {
+            int mid = (r - l) / 2 + l;
+            if(nums[mid] < target) l = mid;
+            else r = mid;
+        }
+        if(nums[l] == target) ret[0] = l;
+        else if(nums[r] == target) ret[0] = r;
+        l = 0;
+        r = nums.length - 1;
+        while(l + 1 < r) {
+            int mid = (r - l) / 2 + l;
+            if(nums[mid] <= target) l = mid;
+            else r = mid;
+        }
+        if(nums[r] == target) ret[1] = r;
+        else if(nums[l] == target) ret[1] = l;
+        return ret;
     }
 }

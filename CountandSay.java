@@ -1,20 +1,20 @@
 public class Solution {
     public String countAndSay(int n) {
-        String result = "1";
-        while(--n > 0) result = helper(result);
-        return result;
+        return helper("1", n);
     }
     
-    private String helper(String str){
-        StringBuilder sb = new StringBuilder();
-        int count = 1;
-        for(int i = 0; i < str.length(); i++){
-            if(i < str.length() - 1 && str.charAt(i) == str.charAt(i + 1)) count++;
-            else {
-                sb.append(count).append(str.charAt(i));
-                count=1;
+    private String helper(String str, int n) {
+        if(n == 1) return str;
+        String ret = "";
+        for(int i = 0; i < str.length(); i++) {
+            int cnt = 1;
+            while(i + 1 < str.length() && str.charAt(i) == str.charAt(i + 1)) {
+                i ++;
+                cnt ++;
             }
+            ret += cnt;
+            ret += str.charAt(i);
         }
-        return sb.toString();
+        return helper(ret, n - 1);
     }
 }
