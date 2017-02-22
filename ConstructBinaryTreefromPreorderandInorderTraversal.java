@@ -19,7 +19,6 @@ public class Solution {
         TreeNode root = new TreeNode(pre[pl]);
         int i = il;
         for(; i <= ir; i++) if(in[i] == root.val) break;
-        int leftLen = i - 1 - il;
         root.left = helper(pre, in, pl + 1, pl + i - il , il, i - 1);
         root.right = helper(pre, in, pl + i - il + 1, pr, i + 1, ir);
         return root;
