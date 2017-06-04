@@ -11,62 +11,60 @@ public class LRUCache {
         }
     }
     
-    int capacity;
-    int size;
     Node head;
     Node tail;
-    Map<Integer, Node> cache;
-
+    int size;
+    int cap;
+    Map<Integer, Node> map;
+    
     public LRUCache(int capacity) {
-        this.capacity = capacity;
+        map = new HashMap<>();
         size = 0;
-        head = new Node(-1, -1);
-        tail = new Node(-1, -1);
-        head.next = tail;
-        tail.prev = head;
-        cache = new HashMap<>();
+        cap = capacity;
     }
     
     public int get(int key) {
-        if(cache.containsKey(key)) {
-            Node node = cache.get(key);
-            node.prev.next = node.next;
-            node.next.prev = node.prev;
-            head.next.prev = node;
-            node.next = head.next;
-            head.next = node;
-            node.prev = head;
-            return node.val;
-        }
-        else return -1;
+        if(!map.containsKey(key)) return -1;
+        moveToHead(map.get(key));
+        return map.get(key).val;
     }
     
     public void put(int key, int value) {
-        if(cache.containsKey(key)) {
-            Node node = cache.get(key);
-            node.val = value;
-            node.prev.next = node.next;
-            node.next.prev = node.prev;
-            head.next.prev = node;
-            node.next = head.next;
-            head.next = node;
-            node.prev = head;
+        if(map.containsKey(key)) {
+            map.get(key).val = value;
+            moveToHead(map.get(key));
             return;
         }
-        if(size == capacity) {
-            Node evct = tail.prev;
-            evct.prev.next = tail;
-            tail.prev = evct.prev;
-            cache.remove(evct.key);
-            size--;
-        }
-        size++;
         Node node = new Node(key, value);
-        cache.put(key, node);
-        head.next.prev = node;
-        node.next = head.next;
-        head.next = node;
-        node.prev = head;
+        map.put(key, node);
+        if(head == null) {
+            head = node;
+            tail = node;
+            size ++;
+            return;
+        }
+        node.next = head;
+        head.prev = node;
+        head = node;
+        if(++size > cap) evict();
+    }
+    
+    private void moveToHead(Node node) {
+        if(head == node) return;
+        node.prev.next = node.next;
+        if(tail == node) tail = node.prev;
+        else node.next.prev = node.prev;
+        head.prev = node;
+        node.next = head;
+        head = node;
+        node.prev = null;
+    }
+    
+    private void evict() {
+        size --;
+        map.remove(tail.key);
+        tail = tail.prev;
+        tail.next = null;
     }
 }
 
